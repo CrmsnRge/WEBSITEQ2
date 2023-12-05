@@ -138,7 +138,7 @@ function reveal() {
       var section2 = document.querySelector('.section2');
       var preview = document.querySelector('.preview');
       var isCursorOnRight = false; // Track if the cursor is on the right
-      var threshold = -200; // Customize this threshold value as needed
+      var threshold = 300; // Customize this threshold value as needed
     
       section2.addEventListener('mousemove', function(event) {
         var sectionWidth = section2.offsetWidth;
