@@ -130,47 +130,70 @@ window.onload = calcScrollValue;
     })
 
     const carousel = document.querySelector(".carousel");
-const progressBarContainer = document.querySelector(".prog-bar-container");
-const progressBar = document.querySelector(".prog-bar");
-const firstImg = document.querySelectorAll("img")[0];
-let isDragStart = false;
-let dragStartX = 0;
-const speedFactor = 4; // Adjust the speed factor as needed
-const scrollFactor = 30; // Adjust as needed
+    const progressBarContainer = document.querySelector(".prog-bar-container");
+    const progressBar = document.querySelector(".prog-bar");
+    let isDragStart = false;
+    let dragStartX = 0;
+    let touchStartX = 0; // Added for touch support
+    const speedFactor = 8; // Adjust the speed factor as needed
+    const scrollFactor = 50; // Adjust as needed
+    
 
-const dragStart = (e) => {
-  isDragStart = true;
-  dragStartX = e.pageX - carousel.offsetLeft;
-};
+    // Define an array of specific colors for the progress bar
+    const colors = ['#8ea5eb', '#6667AB', '#5E5A80'];
 
-const dragging = (e) => {
-  if (!isDragStart) return;
-  e.preventDefault();
-  const mouseX = e.pageX - carousel.offsetLeft;
-  const dragDistance = (mouseX - dragStartX) * speedFactor;
-  carousel.scrollLeft -= dragDistance * scrollFactor;
-  dragStartX = mouseX;
-};
+    const dragStart = (e) => {
+      isDragStart = true;
+      dragStartX = e.pageX - carousel.offsetLeft;
+    };
 
-const dragEnd = () => {
-  isDragStart = false;
-};
+    const dragging = (e) => {
+      if (!isDragStart) return;
+      e.preventDefault();
+      const mouseX = e.pageX || e.touches[0].pageX; // Added for touch support
+      const dragDistance = (mouseX - dragStartX) * speedFactor;
+      carousel.scrollLeft -= dragDistance * scrollFactor;
+      dragStartX = mouseX;
+      updateProgressBar();
+    };
+    
+    const dragEnd = () => {
+      isDragStart = false;
+    };
 
-const updateProgressBar = () => {
-  const totalWidth = carousel.scrollWidth - carousel.clientWidth;
-  const currentScroll = carousel.scrollLeft;
-  const percentage = (currentScroll / totalWidth) * 100;
+    const updateProgressBar = () => {
+      const totalWidth = carousel.scrollWidth - carousel.clientWidth;
+      const currentScroll = carousel.scrollLeft;
+      const percentage = (currentScroll / totalWidth) * 100;
 
-  progressBar.style.width = `${percentage}%`;
-};
+      progressBar.style.width = `${percentage}%`;
+      updateColorProgressBar(percentage);
+    };
 
-carousel.addEventListener("mousedown", dragStart);
-carousel.addEventListener("mousemove", dragging);
-carousel.addEventListener("mouseup", dragEnd);
-carousel.addEventListener("mouseleave", dragEnd);
+    const updateColorProgressBar = (percentage) => {
+      // Interpolate between specific colors based on the scroll position
+      const colorIndex = Math.floor((percentage / 100) * (colors.length - 1));
+      const startColor = colors[colorIndex];
+      const endColor = colors[colorIndex + 1] || startColor;
 
-// Use the scroll event for continuous updates
-carousel.addEventListener("scroll", updateProgressBar); 
+      progressBar.style.background = `linear-gradient(to right, ${startColor}, ${endColor} ${percentage}%)`;
+    };
+
+    carousel.addEventListener("mousedown", dragStart);
+    carousel.addEventListener("mousemove", dragging);
+    carousel.addEventListener("mouseup", dragEnd);
+    carousel.addEventListener("mouseleave", dragEnd);
+    carousel.addEventListener("scroll", updateProgressBar);
+
+    // Show/hide progress bar based on scroll position
+    window.addEventListener("scroll", () => {
+      if (document.documentElement.scrollTop > 100) {
+        progressBarContainer.style.display = "block";
+      } else {
+        progressBarContainer.style.display = "none";
+      }
+    });
+    
 
 
     
