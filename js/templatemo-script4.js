@@ -134,9 +134,9 @@ window.onload = calcScrollValue;
     const progressBar = document.querySelector(".prog-bar");
     let isDragStart = false;
     let dragStartX = 0;
-    let touchStartX = 0; // Added for touch support
+    let touchStartX = 4; // Added for touch support
     const speedFactor = 8; // Adjust the speed factor as needed
-    const scrollFactor = 50; // Adjust as needed
+    const scrollFactor = 30; // Adjust as needed
     
 
     // Define an array of specific colors for the progress bar
@@ -144,7 +144,8 @@ window.onload = calcScrollValue;
 
     const dragStart = (e) => {
       isDragStart = true;
-      dragStartX = e.pageX - carousel.offsetLeft;
+      dragStartX = e.pageX || e.touches[0].pageX;
+      touchStartX = e.touches ? e.touches[0].pageX : 0; // Updated for touch support
     };
 
     const dragging = (e) => {
@@ -156,7 +157,13 @@ window.onload = calcScrollValue;
       dragStartX = mouseX;
       updateProgressBar();
     };
-    
+
+    requestAnimationFrame(() => {
+      carousel.style.scrollBehavior = 'auto';
+      carousel.scrollTop;  // Trigger reflow
+      carousel.style.scrollBehavior = 'smooth';
+    });
+
     const dragEnd = () => {
       isDragStart = false;
     };
@@ -180,10 +187,13 @@ window.onload = calcScrollValue;
     };
 
     carousel.addEventListener("mousedown", dragStart);
-    carousel.addEventListener("mousemove", dragging);
-    carousel.addEventListener("mouseup", dragEnd);
-    carousel.addEventListener("mouseleave", dragEnd);
-    carousel.addEventListener("scroll", updateProgressBar);
+carousel.addEventListener("mousemove", dragging);
+carousel.addEventListener("mouseup", dragEnd);
+carousel.addEventListener("mouseleave", dragEnd);
+carousel.addEventListener("touchstart", dragStart); // Added for touch support
+carousel.addEventListener("touchmove", dragging); // Added for touch support
+carousel.addEventListener("touchend", dragEnd); // Added for touch support
+carousel.addEventListener("scroll", updateProgressBar);
 
     // Show/hide progress bar based on scroll position
     window.addEventListener("scroll", () => {
