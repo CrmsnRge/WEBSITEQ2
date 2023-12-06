@@ -134,7 +134,7 @@ window.onload = calcScrollValue;
     const progressBar = document.querySelector(".prog-bar");
     let isDragStart = false;
     let dragStartX = 0;
-    let touchStartX = 4; // Added for touch support
+    let touchStartX = 50; // Added for touch support
     const speedFactor = 8; // Adjust the speed factor as needed
     const scrollFactor = 30; // Adjust as needed
     
