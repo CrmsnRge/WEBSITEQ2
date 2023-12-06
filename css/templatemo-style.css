@@ -1206,9 +1206,8 @@ border-top-color: #f9c922; /* Chrome, Opera 15+, Safari 5+ */ animation: spin 1.
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: calc(100vh - 50px); /* Adjust the height by changing the value */
+    min-height: calc(100vh - 30px); /* Adjust the height by changing the value */
     background: #343F4F;
-    padding-top: 50px; /* Adjust the padding-top as needed for spacing above the arrows */
     position: relative;
 }
 
@@ -1276,4 +1275,45 @@ border-top-color: #f9c922; /* Chrome, Opera 15+, Safari 5+ */ animation: spin 1.
     width: 0;
     background-color: #4CAF50; /* Adjust the progress bar color */
 }
-  
+.slide-indicator {
+    position: absolute;
+    top: 100px; /* Adjust the vertical position as needed */
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 30px; /* Adjust the font size as needed */
+    color: #fff; /* White text color */
+  }
+
+  .arrow {
+    position: absolute;
+    top: 80px; /* Adjust the vertical position as needed */
+    left: 50%;
+    margin-left: 210px;
+    transform: translateX(-50%);
+    font-size: 50px; /* Adjust the font size as needed */
+    color: #007BFF; /* Adjust the arrow color as needed */
+    cursor: pointer;
+    animation: slideAnimation 2s infinite;
+  }
+
+  .arrow::before {
+    content: '\2192'; /* Unicode right arrow character */
+  }
+
+  @keyframes slideAnimation {
+    0% {
+      transform: translateX(-50%);
+    }
+    25% {
+      transform: translateX(-30%);
+    }
+    50% {
+      transform: translateX(-50%);
+    }
+    75% {
+      transform: translateX(-70%);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
